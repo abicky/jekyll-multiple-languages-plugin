@@ -150,6 +150,7 @@ module Jekyll
       # Original Jekyll configurations
       baseurl_org                 = self.config[ 'baseurl' ].to_s # Baseurl set on _config.yml
       dest_org                    = self.dest                     # Destination folder where the website is generated
+      filter_cache_org            = self.filter_cache.dup
       
       # Site building only variables
       languages                   = self.config['languages'] # List of languages set on _config.yml
@@ -179,6 +180,7 @@ module Jekyll
           @dest                  = dest_org    + "/" + lang
           self.config['baseurl'] = baseurl_org + "/" + lang
           self.config['lang']    =                     lang
+          self.filter_cache.clear
         end
         
         # Translate site attributes to current language
@@ -192,6 +194,7 @@ module Jekyll
       # Revert to initial Jekyll configurations (necessary for regeneration)
       self.config[ 'baseurl' ] = baseurl_org  # Baseurl set on _config.yml
       @dest                    = dest_org     # Destination folder where the website is generated
+      self.filter_cache.clear.merge!(filter_cache_org)
       
       puts 'Build complete'
     end
